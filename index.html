@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1e293b, #020617);
+      color: #0f172a;
+    }
+
+    .layout {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    .logo {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 25px rgba(15, 23, 42, 0.9));
+    }
+
+    .calculator {
+      background: #0b1120;
+      padding: 1.5rem;
+      border-radius: 1.25rem;
+      box-shadow:
+        0 24px 60px rgba(15, 23, 42, 0.85),
+        0 0 0 1px rgba(148, 163, 184, 0.15);
+      width: 320px;
+    }
+
+    .display {
+      background: radial-gradient(circle at 0 0, #22c55e33, #020617 55%);
+      border-radius: 0.75rem;
+      padding: 0.75rem 0.9rem;
+      margin-bottom: 1rem;
+      text-align: right;
+      color: #e5e7eb;
+      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.3);
+    }
+
+    .display-small {
+      min-height: 20px;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      word-wrap: break-word;
+    }
+
+    .display-main {
+      min-height: 40px;
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-top: 0.25rem;
+      overflow-x: auto;
+    }
+
+    .keys {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.75rem 0;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.12s ease,
+        background-color 0.15s ease, color 0.15s ease;
+      box-shadow:
+        0 10px 18px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(30, 64, 175, 0.1);
+      color: #e5e7eb;
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow:
+        0 4px 10px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(30, 64, 175, 0.2);
+    }
+
+    .btn-operator {
+      background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+    }
+
+    .btn-operator:hover {
+      background: linear-gradient(135deg, #2563eb, #38bdf8);
+    }
+
+    .btn-equals {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      grid-column: span 2;
+    }
+
+    .btn-equals:hover {
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+    }
+
+    .btn-clear {
+      background: rgba(239, 68, 68, 0.1);
+      color: #fca5a5;
+    }
+
+    .btn-clear:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    .btn-number {
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+    }
+
+    .btn-number:hover {
+      background: rgba(30, 64, 175, 0.6);
+    }
+
+    .btn-zero {
+      grid-column: span 2;
+    }
+
+    .btn-misc {
+      background: rgba(15, 23, 42, 0.8);
+      color: #cbd5f5;
+    }
+
+    .btn-misc:hover {
+      background: rgba(30, 64, 175, 0.6);
+    }
+
+    @media (max-width: 600px) {
+      .layout {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .logo {
+        width: 110px;
+        height: 110px;
+      }
+
+      .calculator {
+        width: 100%;
+        max-width: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <img
+      class="logo"
+      src="images.jpg"
+      alt="Department of Information Technology logo"
+    />
+
+    <div class="calculator">
+      <div class="display">
+        <div id="history" class="display-small"></div>
+        <div id="result" class="display-main">0</div>
+      </div>
+      <div class="keys">
+        <button class="btn-clear" data-action="clear">AC</button>
+        <button class="btn-misc" data-action="backspace">⌫</button>
+        <button class="btn-misc" data-action="sign">±</button>
+        <button class="btn-operator" data-operator="/">÷</button>
+
+        <button class="btn-number" data-number="7">7</button>
+        <button class="btn-number" data-number="8">8</button>
+        <button class="btn-number" data-number="9">9</button>
+        <button class="btn-operator" data-operator="*">×</button>
+
+        <button class="btn-number" data-number="4">4</button>
+        <button class="btn-number" data-number="5">5</button>
+        <button class="btn-number" data-number="6">6</button>
+        <button class="btn-operator" data-operator="-">−</button>
+
+        <button class="btn-number" data-number="1">1</button>
+        <button class="btn-number" data-number="2">2</button>
+        <button class="btn-number" data-number="3">3</button>
+        <button class="btn-operator" data-operator="+">+</button>
+
+        <button class="btn-number btn-zero" data-number="0">0</button>
+        <button class="btn-misc" data-action="decimal">.</button>
+        <button class="btn-equals" data-action="equals">=</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const historyEl = document.getElementById("history");
+      const resultEl = document.getElementById("result");
+      const keys = document.querySelector(".keys");
+
+      let firstOperand = null;
+      let operator = null;
+      let waitingForSecondOperand = false;
+
+      function inputNumber(num) {
+        const current = resultEl.textContent === "0" || waitingForSecondOperand
+          ? ""
+          : resultEl.textContent;
+        resultEl.textContent = current + num;
+        waitingForSecondOperand = false;
+      }
+
+      function inputDecimal() {
+        if (waitingForSecondOperand) {
+          resultEl.textContent = "0.";
+          waitingForSecondOperand = false;
+          return;
+        }
+        if (!resultEl.textContent.includes(".")) {
+          resultEl.textContent += ".";
+        }
+      }
+
+      function clearAll() {
+        firstOperand = null;
+        operator = null;
+        waitingForSecondOperand = false;
+        resultEl.textContent = "0";
+        historyEl.textContent = "";
+      }
+
+      function backspace() {
+        if (waitingForSecondOperand) return;
+        const current = resultEl.textContent;
+        if (current.length <= 1) {
+          resultEl.textContent = "0";
+        } else {
+          resultEl.textContent = current.slice(0, -1);
+        }
+      }
+
+      function toggleSign() {
+        if (resultEl.textContent === "0") return;
+        if (resultEl.textContent.startsWith("-")) {
+          resultEl.textContent = resultEl.textContent.slice(1);
+        } else {
+          resultEl.textContent = "-" + resultEl.textContent;
+        }
+      }
+
+      function calculate(first, second, op) {
+        const a = parseFloat(first);
+        const b = parseFloat(second);
+        if (isNaN(a) || isNaN(b)) return second;
+        switch (op) {
+          case "+":
+            return a + b;
+          case "-":
+            return a - b;
+          case "*":
+            return a * b;
+          case "/":
+            return b === 0 ? "Error" : a / b;
+          default:
+            return b;
+        }
+      }
+
+      function handleOperator(nextOperatorSymbol) {
+        const inputValue = resultEl.textContent;
+
+        if (firstOperand === null) {
+          firstOperand = inputValue;
+        } else if (!waitingForSecondOperand && operator) {
+          const result = calculate(firstOperand, inputValue, operator);
+          resultEl.textContent =
+            typeof result === "number"
+              ? String(parseFloat(result.toFixed(8)))
+              : result;
+          firstOperand = result;
+        }
+
+        operator = nextOperatorSymbol;
+        waitingForSecondOperand = true;
+
+        historyEl.textContent =
+          typeof firstOperand === "number" || typeof firstOperand === "string"
+            ? firstOperand + " " + nextOperatorSymbol
+            : "";
+      }
+
+      function handleEquals() {
+        if (operator === null || waitingForSecondOperand) return;
+        const secondOperand = resultEl.textContent;
+        const result = calculate(firstOperand, secondOperand, operator);
+
+        const expression = firstOperand + " " + operator + " " + secondOperand;
+        historyEl.textContent = expression + " =";
+
+        resultEl.textContent =
+          typeof result === "number"
+            ? String(parseFloat(result.toFixed(8)))
+            : result;
+
+        firstOperand = result;
+        operator = null;
+        waitingForSecondOperand = true;
+      }
+
+      keys.addEventListener("click", (event) => {
+        const button = event.target;
+        if (!button.matches("button")) return;
+
+        const number = button.getAttribute("data-number");
+        const op = button.getAttribute("data-operator");
+        const action = button.getAttribute("data-action");
+
+        if (number !== null) {
+          inputNumber(number);
+          return;
+        }
+
+        if (op !== null) {
+          handleOperator(op);
+          return;
+        }
+
+        switch (action) {
+          case "decimal":
+            inputDecimal();
+            break;
+          case "clear":
+            clearAll();
+            break;
+          case "backspace":
+            backspace();
+            break;
+          case "sign":
+            toggleSign();
+            break;
+          case "equals":
+            handleEquals();
+            break;
+        }
+      });
+
+      // Optional: keyboard support for basic keys
+      window.addEventListener("keydown", (e) => {
+        if (e.key >= "0" && e.key <= "9") {
+          inputNumber(e.key);
+        } else if (e.key === ".") {
+          inputDecimal();
+        } else if (["+", "-", "*", "/"].includes(e.key)) {
+          handleOperator(e.key);
+        } else if (e.key === "Enter" || e.key === "=") {
+          e.preventDefault();
+          handleEquals();
+        } else if (e.key === "Backspace") {
+          backspace();
+        } else if (e.key.toLowerCase() === "c") {
+          clearAll();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
