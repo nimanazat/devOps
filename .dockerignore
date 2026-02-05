@@ -1,0 +1,20 @@
+# Git
+.git
+.gitignore
+
+# Node / tooling (future-proof)
+node_modules
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
+
+# Editor / OS junk
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# Docker build artifacts
+my-calculator.tar
+docker-compose.yml
+.github
