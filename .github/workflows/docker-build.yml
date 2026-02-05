@@ -1,11 +1,12 @@
 name: Build, test, and push Docker app
 
-# Run this workflow on pushes and PRs targeting main.
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  # Allow manual runs from the "Run workflow" button in GitHub Actions.
+  workflow_dispatch:
 
 jobs:
   build-and-test:
