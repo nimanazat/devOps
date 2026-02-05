@@ -1,0 +1,7 @@
+docker ps            # see running containers
+>> docker stop calc     # or whatever container name/ID
+>> docker rm calc
+
+cd "C:\Users\Nima\OneDrive\Desktop\DevOps"
+docker build -t my-calculator .
+docker run -d -p 8080:80 --name calc my-calculator
